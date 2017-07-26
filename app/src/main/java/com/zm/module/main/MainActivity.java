@@ -1,4 +1,4 @@
-package com.zm.module;
+package com.zm.module.main;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

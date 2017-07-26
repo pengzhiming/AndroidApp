@@ -50,6 +50,11 @@ android {
         targetSdkVersion rootProject.ext.android.ANDROID_TARGET_SDK_VERSION
         versionCode rootProject.ext.version.VERSION_CODE
         versionName rootProject.ext.version.VERSION_NAME
+
+        /**
+         * 默认dev环境
+         */
+        buildConfigField "String", "API_HOST", "\"${rootProject.ext.host_default}\""
     }
 
     signingConfigs {
@@ -83,7 +88,7 @@ android {
          -debug 面向开发者
          */
         debug {
-            signingConfig signingConfigs.beta
+            signingConfig signingConfigs.release
         }
 
         /**
@@ -92,7 +97,11 @@ android {
         beta {
             signingConfig signingConfigs.beta
             minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "API_HOST", "\"${rootProject.ext.host_beta}\""
         }
 
         /**
@@ -101,7 +110,11 @@ android {
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "API_HOST", "\"${rootProject.ext.host_release}\""
         }
     }
 

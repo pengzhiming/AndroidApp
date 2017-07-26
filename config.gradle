@@ -22,4 +22,32 @@ ext {
             "constraint" : 'com.android.support.constraint:constraint-layout:1.0.2',
             "design"     : 'com.android.support:design:25.3.1'
     ]
+
+    host = [
+            /**
+             * DEV 开发环境
+             */
+            HOST_DEV    : 'https://dev.com.cn:8080/',
+            /**
+             * QA 测试环境
+             */
+            HOST_QA     : 'https://qa.com.cn:8080/',
+            /**
+             * RE 正式环境
+             */
+            HOST_PROD    : 'https://re.com.cn:8080/'
+    ]
+
+    /**
+     * 默认环境
+     */
+    host_default = host.HOST_DEV
+    /**
+     * beta 环境
+     */
+    host_beta = host.HOST_QA
+    /**
+     * release 生产环境
+     */
+    host_release = host.HOST_PROD
 }

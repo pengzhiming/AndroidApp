@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AndroidApp</string>
+    <string name="title_activity_splash">闪屏页</string>
 </resources>

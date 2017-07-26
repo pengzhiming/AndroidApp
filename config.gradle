@@ -1,5 +1,5 @@
 /**
- * 配置信息
+ * 项目配置信息
  */
 
 ext {
@@ -27,11 +27,11 @@ ext {
             /**
              * DEV 开发环境
              */
-            HOST_DEV    : 'https://dev.com.cn:8080/',
+            HOST_DEV     : 'https://dev.com.cn:8080/',
             /**
              * QA 测试环境
              */
-            HOST_QA     : 'https://qa.com.cn:8080/',
+            HOST_QA      : 'https://qa.com.cn:8080/',
             /**
              * RE 正式环境
              */

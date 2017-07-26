@@ -17,7 +17,7 @@
         <!-- 闪屏页 -->
         <activity
             android:name=".module.splash.SplashActivity"
-            android:label="@string/title_activity_splash"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
             <intent-filter>

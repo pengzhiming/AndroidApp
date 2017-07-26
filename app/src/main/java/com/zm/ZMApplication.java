@@ -1,10 +1,12 @@
 package com.zm;
 
-import com.zm.lib.LibApplication;
+import android.app.Application;
 
 /**
  * Created by zm on 2017/7/26.
  */
 
-public class ZMApplication extends LibApplication {
+public class ZMApplication extends Application {
+
+
 }

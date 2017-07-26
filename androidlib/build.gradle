@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.android.ANDROID_MIN_SDH_VERSION
         targetSdkVersion rootProject.ext.android.ANDROID_TARGET_SDK_VERSION
-        versionCode rootProject.ext.version.VERSION_CODE
-        versionName rootProject.ext.version.VERSION_NAME
+        versionCode 1
+        versionName "1.0"
     }
 
     sourceSets {

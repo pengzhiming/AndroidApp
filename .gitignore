@@ -71,3 +71,7 @@ app/src/main/java/com/zm/widget/
 app/src/main/res/drawable/
 !/.idea/
 .idea/
+/signing.properties
+app/src/main/java/com/zm/module/home/
+key/
+signing.properties

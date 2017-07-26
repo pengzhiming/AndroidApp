@@ -1,5 +1,45 @@
 apply plugin: 'com.android.application'
 
+/**
+ * 初始化签名信息
+ */
+// RELEASE
+def KEY_PASSWORD = 'KEY_PASSWORD'
+def KEYSTORE_NAME = 'KEYSTORE_NAME'
+def KEYSTORE_PASSWORD = 'KEYSTORE_PASSWORD'
+// BETA
+def KEY_PASSWORD_BETA = 'KEY_PASSWORD_BETA'
+def KEYSTORE_NAME_BETA = 'KEYSTORE_NAME_BETA'
+def KEYSTORE_PASSWORD_BETA = 'KEYSTORE_PASSWORD_BETA'
+
+task initKeyStore() {
+    def proFile = file('../signing.properties')
+    if (proFile != null) {
+        Properties p = new Properties()
+        proFile.withInputStream { stream ->
+            p.load(stream)
+        }
+        if (p.KEY_PASSWORD) {
+            KEY_PASSWORD = p.KEY_PASSWORD
+        }
+        if (p.KEYSTORE_NAME) {
+            KEYSTORE_NAME = p.KEYSTORE_NAME
+        }
+        if (p.KEYSTORE_PASSWORD) {
+            KEYSTORE_PASSWORD = p.KEYSTORE_PASSWORD
+        }
+        if (p.KEYSTORE_PASSWORD_BETA) {
+            KEYSTORE_PASSWORD_BETA = p.KEYSTORE_PASSWORD_BETA
+        }
+        if (p.KEY_PASSWORD_BETA) {
+            KEY_PASSWORD_BETA = p.KEY_PASSWORD_BETA
+        }
+        if (p.KEYSTORE_NAME_BETA) {
+            KEYSTORE_NAME_BETA = p.KEYSTORE_NAME_BETA
+        }
+    }
+}
+
 android {
     compileSdkVersion rootProject.ext.android.ANDROID_COMPILE_SDK_VERSION
     buildToolsVersion rootProject.ext.android.ANDROID_BUILD_TOOLS_VERSION
@@ -8,12 +48,59 @@ android {
         applicationId rootProject.ext.android.APPLICATIONID
         minSdkVersion rootProject.ext.android.ANDROID_MIN_SDH_VERSION
         targetSdkVersion rootProject.ext.android.ANDROID_TARGET_SDK_VERSION
-        versionCode 1
-        versionName "1.0"
+        versionCode rootProject.ext.version.VERSION_CODE
+        versionName rootProject.ext.version.VERSION_NAME
     }
-    buildTypes {
+
+    signingConfigs {
+        /**
+         * debug 版本的签名文件
+         */
+        beta {
+            storeFile file('../key/beta.jks')
+            storePassword KEY_PASSWORD_BETA
+            keyAlias KEYSTORE_NAME_BETA
+            keyPassword KEYSTORE_PASSWORD_BETA
+            v2SigningEnabled false
+        }
+        /**
+         * release 版本的签名文件
+         */
         release {
-            minifyEnabled false
+            storeFile file('../key/release.jks')
+            storePassword KEY_PASSWORD
+            keyAlias KEYSTORE_NAME
+            keyPassword KEYSTORE_PASSWORD
+            v2SigningEnabled false
+        }
+    }
+
+    /**
+     * build type 用来构建不同的变种
+     */
+    buildTypes {
+        /**
+         -debug 面向开发者
+         */
+        debug {
+            signingConfig signingConfigs.beta
+        }
+
+        /**
+         -beta 面向测试小伙伴
+         */
+        beta {
+            signingConfig signingConfigs.beta
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        /**
+         -release 面向正式用户
+         */
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -27,13 +114,8 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile project(':androidlib')
     compile rootProject.ext.libraries.support
     compile rootProject.ext.libraries.constraint
     compile rootProject.ext.libraries.design
-
-    testCompile 'junit:junit:4.12'
+    compile project(':androidlib')
 }

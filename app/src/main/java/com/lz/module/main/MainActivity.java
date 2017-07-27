@@ -1,9 +1,9 @@
-package com.zm.module.main;
+package com.lz.module.main;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import com.zm.R;
+import com.lz.R;
 
 public class MainActivity extends AppCompatActivity {
 

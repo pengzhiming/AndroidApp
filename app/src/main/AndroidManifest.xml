@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.zm">
+          package="com.lz">
 
     <application
         android:name=".ZMApplication"

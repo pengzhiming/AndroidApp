@@ -1,4 +1,5 @@
 # AndroidApp
-  Android学习、实践
-
-#git分支结构
+####介绍：
+    Android学习、实践
+    
+##git分支结构

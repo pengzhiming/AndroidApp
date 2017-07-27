@@ -55,23 +55,17 @@ freeline/
 freeline_project_description.json
 /.idea/
 Would skip repository AndroidApp/
-androidlib/libs/
 androidlib/src/main/java/com/zm/lib/component/
 androidlib/src/main/java/com/zm/lib/helper/
 androidlib/src/main/java/com/zm/lib/util/
 androidlib/src/main/java/com/zm/lib/widget/
-androidlib/src/main/res/drawable/
-app/libs/
 app/src/main/java/com/zm/api/
 app/src/main/java/com/zm/base/
 app/src/main/java/com/zm/component/
 app/src/main/java/com/zm/helper/
 app/src/main/java/com/zm/model/
 app/src/main/java/com/zm/widget/
-app/src/main/res/drawable/
-!/.idea/
 .idea/
 /signing.properties
 app/src/main/java/com/zm/module/home/
-key/
 signing.properties

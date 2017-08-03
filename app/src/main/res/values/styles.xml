@@ -17,4 +17,19 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <!--全屏主题-->
+    <style name="FullScreen.AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!--activity START-->
+    <!--启动页 背景主题 冷启动 减少白屏-->
+    <style name="Splash.FullScreen.AppTheme" parent="FullScreen.AppTheme">
+        <item name="android:windowBackground">@drawable/ic_launch</item>
+    </style>
+
 </resources>

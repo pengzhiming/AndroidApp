@@ -10,15 +10,19 @@
         android:roundIcon="@drawable/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".module.main.MainActivity">
+
+        <!-- 主页 -->
+        <activity android:name=".module.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+                  android:screenOrientation="portrait">
 
         </activity>
 
         <!-- 闪屏页 -->
         <activity
-            android:name=".module.splash.SplashActivity"
+            android:name=".module.launch.SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/Splash.FullScreen.AppTheme"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

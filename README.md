@@ -14,7 +14,7 @@
 * api  用来存放项目中所有的网络请求
 * base 用来存放基类。比如BaseActivity、BaseAdapter等
 * component 用来存跟业务关联的组件，（一般为Lib库component的派生）
-* helper 用来存帮助类（单列），比如用户管理、基础数据等
+* helper 用来存放帮助类，比如用户管理器、基础数据管理器等
 * model 用来存放项目中的业务数据。比如数据库、实体类等
 * module 用来存放项目中的业务模块。比如登陆模块、注册模块等
 * widget 用来存放跟业务相关联的自定义控件

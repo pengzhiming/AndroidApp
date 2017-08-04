@@ -11,24 +11,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- 主页 -->
-        <activity android:name=".module.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-                  android:screenOrientation="portrait">
-
+        <!-- 首页 -->
+        <activity
+            android:name=".module.main.MainActivity"
+            android:label="首页"
+            android:screenOrientation="portrait">
         </activity>
 
         <!-- 闪屏页 -->
         <activity
             android:name=".module.launch.SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/Splash.FullScreen.AppTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash.FullScreen.AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+
+        <!-- 绘制练习 -->
+        <activity android:name=".module.practice.draw.DrawActivity"
+                  android:label="绘制练习"
+                  android:screenOrientation="portrait">
         </activity>
     </application>
 

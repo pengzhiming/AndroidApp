@@ -4,7 +4,7 @@
 
 ext {
     android = [
-            APPLICATIONID               : 'com.zm',
+            APPLICATIONID               : 'com.lz',
             ANDROID_MIN_SDH_VERSION     : 15,
             ANDROID_TARGET_SDK_VERSION  : 25,
             ANDROID_COMPILE_SDK_VERSION : 25,
@@ -21,7 +21,8 @@ ext {
             "support_v7"    : 'com.android.support:appcompat-v7:25.3.1',
             "support_v4"    : 'com.android.support:support-v4:25.3.1',
             "constraint" : 'com.android.support.constraint:constraint-layout:1.0.2',
-            "design"     : 'com.android.support:design:25.3.1'
+            "design"     : 'com.android.support:design:25.3.1',
+            "core"    : 'com.android.support:support-core-ui:25.3.1'
     ]
 
     host = [

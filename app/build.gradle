@@ -4,13 +4,15 @@ apply plugin: 'com.android.application'
  * 初始化签名信息
  */
 // RELEASE
-def KEY_PASSWORD = 'KEY_PASSWORD'
-def KEYSTORE_NAME = 'KEYSTORE_NAME'
-def KEYSTORE_PASSWORD = 'KEYSTORE_PASSWORD'
+def KEY_PASSWORD = ''
+def KEYSTORE_NAME = ''
+def KEYSTORE_PASSWORD = ''
 // BETA
-def KEY_PASSWORD_BETA = 'KEY_PASSWORD_BETA'
-def KEYSTORE_NAME_BETA = 'KEYSTORE_NAME_BETA'
-def KEYSTORE_PASSWORD_BETA = 'KEYSTORE_PASSWORD_BETA'
+def KEY_PASSWORD_BETA = ''
+def KEYSTORE_NAME_BETA = ''
+def KEYSTORE_PASSWORD_BETA = ''
+// 渠道
+def CHANNEL = ''
 
 task initKeyStore() {
     def proFile = file('../signing.properties')
@@ -40,6 +42,68 @@ task initKeyStore() {
     }
 }
 
+/**
+ * 将编译后的apk复制到指定文件夹
+ * <p>
+ * 在./local.properties中添加配置,编译后apk将复制到该文件夹.缺省配置则apk输出到默认路径~/app/build/outputs/apk.
+ * local.properties为本地配置,不同步到服务器仓库,路径请填写本地绝对路径
+ * {@code outputReleaseDir=/User/zm/WorkSpace/gitblit/android/apk/}
+ * <P>
+ * 根据时间戳分类文件夹并命名
+ * 在./local.properties中添加配置{@code outputReleaseFolder=auto}
+ * <p>
+ * 配置默认启动页面
+ * 在./local.properties中添加配置{@code}
+ */
+def outputReleaseDir = ''
+def gitSha1 = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+def time = releaseTime()
+
+task loadProperties() {
+    def proFile = file("../local.properties")
+    if (proFile != null) {
+        Properties p = new Properties()
+        proFile.withInputStream { stream ->
+            p.load(stream)
+        }
+        outputReleaseDir = p.outputReleaseRootDir
+        def folder = p.outputReleaseFolder
+        if (folder == null || folder == '') {
+        } else if (folder == 'auto') {
+            outputReleaseDir += '/' + getDate()
+        } else {
+            outputReleaseDir += '/' + folder
+        }
+        if (p.launchActivity) {
+            launchActivity = p.launchActivity
+        }
+        if (p.gitSha1) {
+            gitSha1 = p.gitSha1
+        }
+        if (p.time) {
+            time = p.time
+        }
+    }
+}
+
+/**
+ * 获取当前git分支
+ */
+def gitBranchName = 'unknown'
+task getGitBranchName {
+    gitBranchName = 'git status'.execute([], project.rootDir).text.trim()
+    gitBranchName = gitBranchName.split("\\n")[0]
+    gitBranchName = gitBranchName.split(" ")[2]
+}
+
+def getDate() {
+    return new Date().format("yyyyMMddHH", TimeZone.getTimeZone("UTC"))
+}
+
+def releaseTime() {
+    return new Date().format("yyyyMMddHHmm", TimeZone.getTimeZone("UTC"))
+}
+
 android {
     compileSdkVersion rootProject.ext.android.ANDROID_COMPILE_SDK_VERSION
     buildToolsVersion rootProject.ext.android.ANDROID_BUILD_TOOLS_VERSION
@@ -55,6 +119,14 @@ android {
          * 默认dev环境
          */
         buildConfigField "String", "API_HOST", "\"${rootProject.ext.host_default}\""
+
+        /**
+         * common
+         */
+        buildConfigField "String", "GIT_BRANCHNAME", "\"${gitBranchName}\""
+        buildConfigField "String", "GIT_SHA1", "\"${gitSha1}\""
+        buildConfigField "String", "TIME", "\"${time}\""
+        buildConfigField "String", "CHANNEL", "\"${CHANNEL}\""
     }
 
     signingConfigs {
@@ -121,6 +193,13 @@ android {
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
+
+            res.srcDirs = [
+                    'src/main/res',
+                    'src/main/res/activity',
+                    'src/main/res/fragment',
+                    'src/main/res/pritice'
+            ]
         }
     }
 }
@@ -130,5 +209,8 @@ dependencies {
     compile rootProject.ext.libraries.support_v7
     compile rootProject.ext.libraries.constraint
     compile rootProject.ext.libraries.design
+    compile rootProject.ext.libraries.core
     compile project(':androidlib')
+    // 快速打包
+//    compile 'com.mcxiaoke.gradle:packer-helper:1.0.8'
 }

@@ -1,6 +1,7 @@
 package com.lz;
 
-import com.zm.lib.LibApplication;
+
+import com.core.LibApplication;
 
 /**
  * Created by zm on 2017/7/26.

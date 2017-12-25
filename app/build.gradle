@@ -127,7 +127,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile rootProject.ext.libraries.support
+    compile rootProject.ext.libraries.support_v7
     compile rootProject.ext.libraries.constraint
     compile rootProject.ext.libraries.design
     compile project(':androidlib')

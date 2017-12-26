@@ -1,4 +1,4 @@
-package com.lz.lib.util;
+package com.core.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,12 +8,12 @@ import java.util.Date;
 /**
  * 日期操作工具类.
  *
- * Created by zm on 8/1/2017.
+ * Created by zm on 2017/11/17.
  */
 
 public class DateUtil {
 
-    public DateUtil() {
+    private DateUtil() {
     }
 
     /**

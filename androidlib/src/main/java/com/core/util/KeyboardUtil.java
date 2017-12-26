@@ -1,4 +1,4 @@
-package com.lz.lib.util;
+package com.core.util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,12 +9,12 @@ import android.widget.EditText;
 /**
  * 软键盘管理
  *
- * Created by zm on 8/3/2017.
+ * Created by zm on 2017/11/17.
  */
 
 public class KeyboardUtil {
 
-    public KeyboardUtil() {
+    private KeyboardUtil() {
     }
 
     public static void openSoftKeyboard(EditText et) {

@@ -1,8 +1,7 @@
 package com.lz;
 
-import android.content.Context;
 
-import com.zm.lib.LibApplication;
+import com.core.LibApplication;
 
 /**
  * Created by zm on 2017/7/26.
@@ -10,15 +9,5 @@ import com.zm.lib.LibApplication;
 
 public class ZMApplication extends LibApplication {
 
-    private static  Context context = null;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        context = getApplicationContext();
-    }
-
-    public static Context getContext() {
-        return context;
-    }
 }

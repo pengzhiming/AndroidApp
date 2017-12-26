@@ -18,7 +18,8 @@ ext {
     ]
 
     libraries = [
-            "support"    : 'com.android.support:appcompat-v7:25.3.1',
+            "support_v7"    : 'com.android.support:appcompat-v7:25.3.1',
+            "support_v4"    : 'com.android.support:support-v4:25.3.1',
             "constraint" : 'com.android.support.constraint:constraint-layout:1.0.2',
             "design"     : 'com.android.support:design:25.3.1',
             "core"    : 'com.android.support:support-core-ui:25.3.1'

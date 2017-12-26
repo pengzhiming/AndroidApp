@@ -1,4 +1,4 @@
-package com.lz.lib.util;
+package com.core.util;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -6,12 +6,12 @@ import java.io.IOException;
 /**
  * 关闭Closeable对象工具类
  *
- * Created by zm on 2017/4/24.
+ * Created by zm on 2017/10/18.
  */
 
 public final class CloseUtils {
 
-    public CloseUtils() {
+    private CloseUtils() {
     }
 
     /**

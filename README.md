@@ -19,4 +19,8 @@
 * module 用来存放项目中的业务模块。比如登陆模块、注册模块等
 * widget 用来存放跟业务相关联的自定义控件
 
-## Gradle构建
+## Gradle构建：
+<p>
+    config.gradle用来存放项目中所有的配置;
+    build.gradle(Module)通过buildType构建不同变种,如debug(面向开发者)、beta(面向测试小伙伴)、release(面向正式环境)，根据不同变种配置其所需的工程项目环境信息。
+</p>

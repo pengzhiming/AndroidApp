@@ -1,43 +1,61 @@
 /**
- * 项目配置信息
+ * 项目配置文件
+ *
  */
 
 ext {
     android = [
-            APPLICATIONID               : 'com.lz',
-            ANDROID_MIN_SDH_VERSION     : 15,
-            ANDROID_TARGET_SDK_VERSION  : 25,
-            ANDROID_COMPILE_SDK_VERSION : 25,
-            ANDROID_BUILD_TOOLS_VERSION : '25.0.3',
-            APPLICATION_CLASS_NAME      : 'com.lz.ZMApplication'
+            APPLICATIONID               : 'com.yl.merchat',
+            ANDROID_MIN_SDH_VERSION     : 17,
+            ANDROID_TARGET_SDK_VERSION  : 27,
+            ANDROID_COMPILE_SDK_VERSION : 27,
+            ANDROID_BUILD_TOOLS_VERSION : '27.0.3',
+            APPLICATION_CLASS_NAME      : 'com.yl.merchat.YLApplication'
     ]
 
     version = [
-            VERSION_CODE : 1,
+            VERSION_CODE : 100,
             VERSION_NAME : '1.0.0'
     ]
 
-    libraries = [
-            "support_v7"    : 'com.android.support:appcompat-v7:25.3.1',
-            "support_v4"    : 'com.android.support:support-v4:25.3.1',
-            "constraint" : 'com.android.support.constraint:constraint-layout:1.0.2',
-            "design"     : 'com.android.support:design:25.3.1',
-            "core"    : 'com.android.support:support-core-ui:25.3.1'
+    dependencies  = [
+            "appcompat-v7"          :       'com.android.support:appcompat-v7:27.1.1',
+            "support-design"        :       'com.android.support:design:27.1.1',
+            "support-v4"            :       'com.android.support:appcompat-v4:27.1.1',
+            "recycleview"           :       'com.android.support:recyclerview-v7:27.1.1',
+            "constraint-layout"     :       'com.android.support.constraint:constraint-layout:1.1.3',
+
+            "smartrefresh"          :       'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1',
+            "okhttp"                :       'com.squareup.okhttp3:okhttp:3.9.0',
+            "converter-gson"        :       'com.squareup.retrofit2:converter-gson:2.3.0',
+            "glide"                 :       'com.github.bumptech.glide:glide:3.7.0',
+            "okhttp3-integration"   :       'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar',
+            "rxandroid"             :       'io.reactivex.rxjava2:rxandroid:2.0.1',
+            "rxjava"                :       'io.reactivex.rxjava2:rxjava:2.1.5',
+            "adapter-rxjava"        :       'com.squareup.retrofit2:adapter-rxjava2:2.4.0',
+            "retrofit2"             :       'com.squareup.retrofit2:retrofit:2.4.0',
+            "logging-interceptor"   :       'com.squareup.okhttp3:logging-interceptor:3.9.0',
+            "stetho"                :       'com.facebook.stetho:stetho:1.5.0',
+            "rxpermissions"         :       'com.github.tbruyelle:rxpermissions:0.10.2'
+    ]
+
+    gaode = [
+            "GAODE_KEY"             :       '4b4da9980d3fdafb523f47315b00ad19'
     ]
 
     host = [
             /**
              * DEV 开发环境
              */
-            HOST_DEV     : 'https://dev.com.cn:8080/',
+            HOST_DEV     : 'http://192.168.2.112:8000',
             /**
              * QA 测试环境
              */
-            HOST_QA      : 'https://qa.com.cn:8080/',
+            HOST_QA      : '',
             /**
              * RE 正式环境
              */
-            HOST_PROD    : 'https://re.com.cn:8080/'
+            HOST_PROD    : ''
     ]
 
     /**

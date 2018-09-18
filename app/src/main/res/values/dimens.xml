@@ -1,16 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="dp_6">6dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-
-    <!-- 通用间距 -->
-    <dimen name="dp_small">4dp</dimen>
-    <dimen name="dp_small_more">6dp</dimen>
-    <dimen name="dp_medium">12dp</dimen>
-    <dimen name="dp_medium_more">14dp</dimen>
-    <dimen name="dp_normal">16dp</dimen>
-    <dimen name="dp_big">20dp</dimen>
-
-    <!--分割线规范-->
-    <dimen name="spit_height_small">0.3dp</dimen>
-    <dimen name="spit_height_normal">0.5dp</dimen>
-    <dimen name="spit_height_large">10dp</dimen>
 </resources>

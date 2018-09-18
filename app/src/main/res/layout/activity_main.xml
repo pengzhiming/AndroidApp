@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="com.yl.merchat.component.databind.ClickHandler"/>
+        <variable
+            name="click"
+            type="ClickHandler"/>
+    </data>
+
+    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.yl.merchat.module.main.MainActivity">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello World!"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{click.onClick}"
+            android:text="点我试试"/>
+
+        <Button
+            android:id="@+id/btn_getNotices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{click.onClick}"
+            android:text="获取系统公告"/>
+
+        <Button
+            android:id="@+id/btn_goMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{click.onClick}"
+            android:text="显示地图"/>
+    </LinearLayout>
+</layout>

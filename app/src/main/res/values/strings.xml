@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">AndroidApp</string>
-    <string name="title_activity_splash">闪屏页</string>
+    <string name="title_activity_map_show">MapShowActivity</string>
+
+    <!-- manifest -->
+    <string name="permissions_location">请检查点位权限是否开启</string>
+    <string name="permissions_phone_state">您拒绝了获取手机状态信息权限</string>
 </resources>

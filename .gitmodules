@@ -1,0 +1,3 @@
+[submodule "librarys/YLCore"]
+	path = librarys/YLCore
+	url = git@39.108.158.205:and_group/core.git

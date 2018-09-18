@@ -42,63 +42,8 @@ task initKeyStore() {
     }
 }
 
-/**
- * 将编译后的apk复制到指定文件夹
- * <p>
- * 在./local.properties中添加配置,编译后apk将复制到该文件夹.缺省配置则apk输出到默认路径~/app/build/outputs/apk.
- * local.properties为本地配置,不同步到服务器仓库,路径请填写本地绝对路径
- * {@code outputReleaseDir=/User/zm/WorkSpace/gitblit/android/apk/}
- * <P>
- * 根据时间戳分类文件夹并命名
- * 在./local.properties中添加配置{@code outputReleaseFolder=auto}
- * <p>
- * 配置默认启动页面
- * 在./local.properties中添加配置{@code}
- */
-def outputReleaseDir = ''
-def gitSha1 = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 def time = releaseTime()
 
-task loadProperties() {
-    def proFile = file("../local.properties")
-    if (proFile != null) {
-        Properties p = new Properties()
-        proFile.withInputStream { stream ->
-            p.load(stream)
-        }
-        outputReleaseDir = p.outputReleaseRootDir
-        def folder = p.outputReleaseFolder
-        if (folder == null || folder == '') {
-        } else if (folder == 'auto') {
-            outputReleaseDir += '/' + getDate()
-        } else {
-            outputReleaseDir += '/' + folder
-        }
-        if (p.launchActivity) {
-            launchActivity = p.launchActivity
-        }
-        if (p.gitSha1) {
-            gitSha1 = p.gitSha1
-        }
-        if (p.time) {
-            time = p.time
-        }
-    }
-}
-
-/**
- * 获取当前git分支
- */
-def gitBranchName = 'unknown'
-task getGitBranchName {
-    gitBranchName = 'git status'.execute([], project.rootDir).text.trim()
-    gitBranchName = gitBranchName.split("\\n")[0]
-    gitBranchName = gitBranchName.split(" ")[2]
-}
-
-def getDate() {
-    return new Date().format("yyyyMMddHH", TimeZone.getTimeZone("UTC"))
-}
 
 def releaseTime() {
     return new Date().format("yyyyMMddHHmm", TimeZone.getTimeZone("UTC"))
@@ -115,23 +60,36 @@ android {
         versionCode rootProject.ext.version.VERSION_CODE
         versionName rootProject.ext.version.VERSION_NAME
 
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         /**
          * 默认dev环境
          */
         buildConfigField "String", "API_HOST", "\"${rootProject.ext.host_default}\""
-
         /**
          * common
          */
-        buildConfigField "String", "GIT_BRANCHNAME", "\"${gitBranchName}\""
-        buildConfigField "String", "GIT_SHA1", "\"${gitSha1}\""
         buildConfigField "String", "TIME", "\"${time}\""
         buildConfigField "String", "CHANNEL", "\"${CHANNEL}\""
+        flavorDimensions 'yyl'
+        resValue("string", "app_name", "云易链")
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+            res.srcDirs = [
+                    'src/main/res',
+                    'src/main/res/fragment',
+                    'src/main/res/view'
+            ]
+        }
+        debug.setRoot('src/buildtype/debug')
+        beta.setRoot('src/buildtype/beta')
     }
 
     signingConfigs {
         /**
-         * debug 版本的签名文件
+         * beta 版本的签名文件
          */
         beta {
             storeFile file('../key/beta.jks')
@@ -160,7 +118,13 @@ android {
          -debug 面向开发者
          */
         debug {
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.beta
+            debuggable true
+            resValue("string", "app_name", "云易链_DEBUG")
+            manifestPlaceholders = [
+                    "LANUCH_ACTIVITY": "com.yl.merchat.module.splash._SplashActivity",
+                    "GAODE_KEY"      : "${rootProject.ext.gaode.GAODE_KEY}"
+            ]
         }
 
         /**
@@ -168,12 +132,17 @@ android {
          */
         beta {
             signingConfig signingConfigs.beta
-            minifyEnabled true
-            shrinkResources true
-            zipAlignEnabled true
             debuggable false
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "API_HOST", "\"${rootProject.ext.host_beta}\""
+            resValue("string", "app_name", "云易链_BETA")
+            manifestPlaceholders = [
+                    "LANUCH_ACTIVITY": "com.yl.merchat.module.splash._SplashActivity",
+                    "GAODE_KEY"      : "${rootProject.ext.gaode.GAODE_KEY}"
+            ]
         }
 
         /**
@@ -181,36 +150,92 @@ android {
          */
         release {
             signingConfig signingConfigs.release
-            minifyEnabled true
-            shrinkResources true
-            zipAlignEnabled true
             debuggable false
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "API_HOST", "\"${rootProject.ext.host_release}\""
+            manifestPlaceholders = [
+                    "LANUCH_ACTIVITY": "com.yl.merchat.module.splash.SplashActivity",
+                    "GAODE_KEY"      : "${rootProject.ext.gaode.GAODE_KEY}"
+            ]
+        }
+
+    }
+
+    /**
+     * 渠道
+     */
+    productFlavors {
+        yl {}
+    }
+
+    /**
+     * 重命名apk
+     * 将apk到../output/apk
+     */
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == 'release') {
+            variant.assemble.doLast {
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('release.apk')) {
+                        def fileName = "${variant.flavorName}_v${defaultConfig.versionName}_${releaseTime()}"
+                        def outputPath = "../output/apk"
+                        copy {
+                            from outputFile
+                            into outputPath
+                            rename { fileName + ".apk" }
+                        }
+                    }
+                }
+            }
         }
     }
 
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
+    lintOptions {
+        abortOnError false
+        quiet true
+        ignoreWarnings true
+    }
 
-            res.srcDirs = [
-                    'src/main/res',
-                    'src/main/res/activity',
-                    'src/main/res/fragment',
-                    'src/main/res/pritice'
-            ]
-        }
+    dataBinding {
+        enabled = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
     }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile rootProject.ext.libraries.support_v7
-    compile rootProject.ext.libraries.constraint
-    compile rootProject.ext.libraries.design
-    compile rootProject.ext.libraries.core
-    compile project(':androidlib')
-    // 快速打包
-//    compile 'com.mcxiaoke.gradle:packer-helper:1.0.8'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    implementation project(':librarys:YLCore')
+    implementation rootProject.ext.dependencies["constraint-layout"]
+    implementation rootProject.ext.dependencies["recycleview"]
+    implementation rootProject.ext.dependencies["appcompat-v7"]
+    implementation rootProject.ext.dependencies["support-design"]
+    implementation rootProject.ext.dependencies["smartrefresh"]
+    implementation rootProject.ext.dependencies["rxpermissions"]
+    // debug
+    debugImplementation rootProject.ext.dependencies["stetho"]
 }

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/dp_6">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <!-- 服务器 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_servlet"
+                android:textColor="@color/color_red"
+                android:textSize="@dimen/sp_16"/>
+            <TextView
+                android:id="@+id/tv_servlet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_red"
+                android:textSize="@dimen/sp_16"/>
+        </TableRow>
+
+        <!-- 渠道 -->
+        <TableRow
+            android:layout_marginTop="@dimen/dp_6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_channel"
+                android:textColor="@color/color_red"
+                android:textSize="@dimen/sp_16"/>
+            <TextView
+                android:id="@+id/tv_channel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_red"
+                android:textSize="@dimen/sp_16"/>
+        </TableRow>
+
+        <!-- 版本 -->
+        <TableRow
+            android:layout_marginTop="@dimen/dp_6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_version"
+                android:textColor="@color/color_red"
+                android:textSize="@dimen/sp_16"/>
+            <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_red"
+                android:textSize="@dimen/sp_16"/>
+        </TableRow>
+
+        <TextView
+            android:layout_marginTop="@dimen/dp_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_warning"
+            android:textColor="@color/color_red"
+            android:textSize="@dimen/sp_18"/>
+
+    </LinearLayout>
+</layout>

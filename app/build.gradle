@@ -4,13 +4,15 @@ apply plugin: 'com.android.application'
  * 初始化签名信息
  */
 // RELEASE
-def KEY_PASSWORD = 'KEY_PASSWORD'
-def KEYSTORE_NAME = 'KEYSTORE_NAME'
-def KEYSTORE_PASSWORD = 'KEYSTORE_PASSWORD'
+def KEY_PASSWORD = ''
+def KEYSTORE_NAME = ''
+def KEYSTORE_PASSWORD = ''
 // BETA
-def KEY_PASSWORD_BETA = 'KEY_PASSWORD_BETA'
-def KEYSTORE_NAME_BETA = 'KEYSTORE_NAME_BETA'
-def KEYSTORE_PASSWORD_BETA = 'KEYSTORE_PASSWORD_BETA'
+def KEY_PASSWORD_BETA = ''
+def KEYSTORE_NAME_BETA = ''
+def KEYSTORE_PASSWORD_BETA = ''
+// 渠道
+def CHANNEL = ''
 
 task initKeyStore() {
     def proFile = file('../signing.properties')
@@ -40,6 +42,13 @@ task initKeyStore() {
     }
 }
 
+def time = releaseTime()
+
+
+def releaseTime() {
+    return new Date().format("yyyyMMddHHmm", TimeZone.getTimeZone("UTC"))
+}
+
 android {
     compileSdkVersion rootProject.ext.android.ANDROID_COMPILE_SDK_VERSION
     buildToolsVersion rootProject.ext.android.ANDROID_BUILD_TOOLS_VERSION
@@ -51,15 +60,36 @@ android {
         versionCode rootProject.ext.version.VERSION_CODE
         versionName rootProject.ext.version.VERSION_NAME
 
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         /**
          * 默认dev环境
          */
         buildConfigField "String", "API_HOST", "\"${rootProject.ext.host_default}\""
+        /**
+         * common
+         */
+        buildConfigField "String", "TIME", "\"${time}\""
+        buildConfigField "String", "CHANNEL", "\"${CHANNEL}\""
+        flavorDimensions 'yyl'
+        resValue("string", "app_name", "云易链")
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+            res.srcDirs = [
+                    'src/main/res',
+                    'src/main/res/fragment',
+                    'src/main/res/view'
+            ]
+        }
+        debug.setRoot('src/buildtype/debug')
+        beta.setRoot('src/buildtype/beta')
     }
 
     signingConfigs {
         /**
-         * debug 版本的签名文件
+         * beta 版本的签名文件
          */
         beta {
             storeFile file('../key/beta.jks')
@@ -88,7 +118,13 @@ android {
          -debug 面向开发者
          */
         debug {
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.beta
+            debuggable true
+            resValue("string", "app_name", "云易链_DEBUG")
+            manifestPlaceholders = [
+                    "LANUCH_ACTIVITY": "com.yl.merchat.module.splash._SplashActivity",
+                    "GAODE_KEY"      : "${rootProject.ext.gaode.GAODE_KEY}"
+            ]
         }
 
         /**
@@ -96,12 +132,17 @@ android {
          */
         beta {
             signingConfig signingConfigs.beta
-            minifyEnabled true
-            shrinkResources true
-            zipAlignEnabled true
             debuggable false
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "API_HOST", "\"${rootProject.ext.host_beta}\""
+            resValue("string", "app_name", "云易链_BETA")
+            manifestPlaceholders = [
+                    "LANUCH_ACTIVITY": "com.yl.merchat.module.splash._SplashActivity",
+                    "GAODE_KEY"      : "${rootProject.ext.gaode.GAODE_KEY}"
+            ]
         }
 
         /**
@@ -109,26 +150,92 @@ android {
          */
         release {
             signingConfig signingConfigs.release
-            minifyEnabled true
-            shrinkResources true
-            zipAlignEnabled true
             debuggable false
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "API_HOST", "\"${rootProject.ext.host_release}\""
+            manifestPlaceholders = [
+                    "LANUCH_ACTIVITY": "com.yl.merchat.module.splash.SplashActivity",
+                    "GAODE_KEY"      : "${rootProject.ext.gaode.GAODE_KEY}"
+            ]
+        }
+
+    }
+
+    /**
+     * 渠道
+     */
+    productFlavors {
+        yl {}
+    }
+
+    /**
+     * 重命名apk
+     * 将apk到../output/apk
+     */
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == 'release') {
+            variant.assemble.doLast {
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('release.apk')) {
+                        def fileName = "${variant.flavorName}_v${defaultConfig.versionName}_${releaseTime()}"
+                        def outputPath = "../output/apk"
+                        copy {
+                            from outputFile
+                            into outputPath
+                            rename { fileName + ".apk" }
+                        }
+                    }
+                }
+            }
         }
     }
 
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
+    lintOptions {
+        abortOnError false
+        quiet true
+        ignoreWarnings true
+    }
+
+    dataBinding {
+        enabled = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
     }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile rootProject.ext.libraries.support
-    compile rootProject.ext.libraries.constraint
-    compile rootProject.ext.libraries.design
-    compile project(':androidlib')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    implementation project(':librarys:YLCore')
+    implementation rootProject.ext.dependencies["constraint-layout"]
+    implementation rootProject.ext.dependencies["recycleview"]
+    implementation rootProject.ext.dependencies["appcompat-v7"]
+    implementation rootProject.ext.dependencies["support-design"]
+    implementation rootProject.ext.dependencies["smartrefresh"]
+    implementation rootProject.ext.dependencies["rxpermissions"]
+    // debug
+    debugImplementation rootProject.ext.dependencies["stetho"]
 }

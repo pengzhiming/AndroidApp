@@ -1,1 +1,2 @@
-include ':app', ':androidlib'
+include ':app',
+        ':librarys:YLCore'

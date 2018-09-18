@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_channel">渠&#160;&#160;&#160;&#160;道：</string>
+    <string name="title_servlet">服务器：</string>
+    <string name="title_version">版&#160;&#160;&#160;&#160;本：</string>
+    <string name="title_warning">内测版本，请勿外传</string>
+</resources>
